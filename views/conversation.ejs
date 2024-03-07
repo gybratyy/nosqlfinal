@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My First Webpage</title>
+  </head>
+  <body>
+    
+    <h4><%= conversation.name %></h4>
+
+    
+
+    <% messages.forEach(message => { %>
+      <div style="display: flex; flex-direction: row;">
+        <p><%= message.content %></p>
+        <p>-<%= message.sender %></p>
+      </div>
+      <% }) %>
+
+    <hr>
+      <p>Members:</p>
+      <% participants.forEach(participant => { %>
+        <p><%= participant.username %></p>
+       
+      <% }) %>
+
+    <hr>
+
+    <form action="/sendmessage" method="post">
+      <input type="hidden" name="conversationId" value="<%= conversation._id %>">
+      <input type="hidden" name="sender" value="<%= user.username %>">
+      <input type="text" name="content" id="content">
+      <button type="submit">Send Message</button>
+    </form>
+
+
+  </body>
+</html>   

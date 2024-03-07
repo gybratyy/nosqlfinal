@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My First Webpage</title>
+    <style>
+        /* Base styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        /* Form and button base styles */
+        .form-container, .chat-form {
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 320px;
+        }
+
+        input[type="text"], select, button, input[type="checkbox"] + label {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            margin-bottom: 8px;
+            box-sizing: border-box;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        /* Button styling */
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Utility classes */
+        .hidden {
+            display: none;
+        }
+
+        /* Custom classes for layout */
+        .flex-row {
+            display: flex;
+            align-items: center;
+        }
+
+        .flex-column {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: normal;
+            color: #333;
+        }
+
+        .chat-button {
+            width: auto;
+            padding: 8px 16px;
+            font-size: 16px;
+            margin: 5px;
+            display: inline-block; /* For inline display */
+        }
+
+        hr {
+            width: 80%;
+            border-top: 1px solid #ccc;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .fieldset-custom {
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .legend-custom {
+            padding: 0 5px;
+            width: auto;
+            border: none;
+        }
+
+    </style>
+</head>
+<body>
+    <button id="toggle-chat-create" class="chat-button">Create Chat</button>
+
+    <div class="form-container hidden" id="create-chat-form">
+        <form action="/createchat" method="post">
+            <div class="flex-column">
+                <label for="chatname">Chat Name:</label>
+                <input type="text" name="chatname" id="chatname">
+            </div>
+            <fieldset class="fieldset-custom">
+                <legend class="legend-custom">Select Participants:</legend>
+                <div class="flex-column">
+                    <input type="hidden" name="participants" value="<%= user._id %>">
+                    <% users.forEach(userdata => { %>
+                        <% if (userdata._id.toString() !== user._id.toString()) { %>
+                            <div class="flex-row">
+                                <input type="checkbox" name="participants" id="<%= userdata.username %>" value="<%= userdata._id %>">
+                                <label for="<%= userdata.username %>"><%= userdata.username %></label>
+                            </div>
+                        <% } %>
+                    <% }) %>
+                </div>
+            </fieldset>
+            <button type="submit" class="chat-button">Create Chat</button>
+        </form>
+    </div>
+    
+    <% conversations.forEach(conversation => { %>
+        <div class="chat-form">
+            <form action="/conversation" method="post"> 
+                <input type="hidden" name="conversationid" value="<%= conversation._id %>">
+                <button type="submit" class="chat-button"><%= conversation.name %></button> 
+            </form>
+        </div>
+    <% }) %>
+
+    <script>
+        document.getElementById('toggle-chat-create').addEventListener('click', () => {
+            var form = document.getElementById('create-chat-form');
+            form.classList.toggle('hidden');
+        })
+    </script>
+</body>
+</html>
